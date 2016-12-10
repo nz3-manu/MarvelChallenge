@@ -2,10 +2,14 @@ import React, { Component } from 'react';
 import md5 from 'md5';
 import './App.css';
 
-var TitleComits = React.createClass({
+var WrapC = React.createClass({
   render: function() {
     return (
-      <ul> {this.props.name} </ul>
+      <div>
+          <img src={this.props.img}/>
+          <h1>{this.props.name}</h1>
+          <p>{this.props.description}</p>
+      </div>
     )
   }
 });
@@ -25,18 +29,13 @@ var App = React.createClass ({
         })
   },
   render: function() {
+    console.log(this.state.comits);
     return (
       <div>
         <input ref="textBox" type="text" />
           <div>
-            < TitleComits name= {
-              (this.state.comits) ? this.state.comits.map((itemComits, i) => {return <h1 key={i}>{itemComits.name}</h1>}) : "no"
-
-            }/>
-
+    {(this.state.comits) ? this.state.comits.map((itemC) => <WrapC img={itemC.thumbnail.path} name={itemC.name} description={itemC.description} />) : "waiting..."}
           </div>
-
-
       </div>
     );
   }
