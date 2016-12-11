@@ -25,7 +25,7 @@ border-radius: 2px;
   padding-left: 15px;
   border: none;
 }
-/* wrapContainer__sortBy */
+/* Section comits */
 p{
   margin: 0px;
 }
@@ -52,6 +52,10 @@ p{
 
 
 /*  */
+.wrapContainerFavourites{
+  display: flex;
+  justify-content: space-between;
+}
 
 .wrapContainer {
   width: 963px;;
@@ -76,4 +80,19 @@ p{
 }
 .img-circle {
   margin: -14px;
+}
+/* Favorite comits*/
+.wrapFavourites{
+  width: 316px;
+  height: 400px;
+  background-color: #ebebeb;
+}
+.nav_Favourites {
+  width: 100%;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+}
+.textFavourites {
+  padding-left: 10px;
 }

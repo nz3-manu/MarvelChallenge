@@ -2,29 +2,42 @@ import React, { Component } from 'react';
 import md5 from 'md5';
 import './App.css';
 
+var Favourites = React.createClass({
+  render: function () {
+      return (
+        <div>
+          <img src = {this.props.imgFavo}/>
+          <h3> {this.props.textFavo} </h3>
+        </div>
+      )
+    }
+});
+
 var WrapC = React.createClass({
+  bigImg:function(){
+    this.props.thumbnails(this.props.index)
+  },
   render: function() {
     return (
         <div className="wrapPrincipal">
             <div className="wrapPrincipal__img">
                 <img height="200px" width="200px" className="img-circle" src={this.props.img}/>
                 <h3> Related comics </h3>
-                <p>Related comics </p>
-                <p>Related comics</p>
+                <p> Related comics  </p>
+                <p> Related comics </p>
             </div>
-
             <div className="wrapPrincipal__title">
                 <h1> {this.props.name} </h1>
                 <p> {this.props.description} </p>
-                <button type="button" className="btn btn-danger">View more</button>
-                <p>Related comics </p>
-                <p>Related comics</p>
+                <button type="button"  onClick={this.bigImg} className="btn btn-danger"> View more</button>
+                <p> Related comics </p>
+                <p> Related comics </p>
             </div>
-      </div>
-    )
+      </div> )
   }
 });
 
+/* Principal component */
 var App = React.createClass ({
   getInitialState: function() {
     return {  }
@@ -45,6 +58,9 @@ var App = React.createClass ({
          this.setState({ comits: comitsApi.data.results });
        })
   },
+  viewMore: function(i){
+    
+  },
   render: function() {
     console.log(this.state.comits);
     return (
@@ -58,7 +74,8 @@ var App = React.createClass ({
                   <img src="/icons/search.png" width="50px" height="50px" alt="search"/>
             </div>
           </nav>
-            <div className="wrapContainer">
+              <div className="wrapContainerFavourites">
+                  <div className="wrapContainer">
                 <div className="wrapContainer__sortBy">
                     <div className="sortBy__imgCharact">
                         <img src= "/icons/characters.png" height="40px" alt="Characters"/>
@@ -69,12 +86,18 @@ var App = React.createClass ({
                       <img src= "/icons/btn_arrow_down.png" height="40px" alt="Characters"/>
                     </div>
                 </div>
-                {(this.state.comits) ? this.state.comits.map((iC) => <WrapC img={`${iC.thumbnail.path}.${iC.thumbnail.extension}`} name={iC.name} description={iC.description} />) : "waiting..."}
+                {(this.state.comits) ? this.state.comits.map((iC, i) => <WrapC img={`${iC.thumbnail.path}.${iC.thumbnail.extension}`} name={iC.name} description={iC.description} thumbnails={this.viewMore} index={i}/>) : "waiting..."}
+                  </div>
+                  <div className="wrapFavourites">
+                    <div className="nav_Favourites">
+                        <img src="/icons/btn-favourites-primary.png" width="50px" height="50px" alt="search"/>
+                        <h2 className="textFavourites">My Favourites</h2>
+
+                    </div>
+                  </div>
             </div>
       </div>
     );
   }
-
 });
-
 export default App;
