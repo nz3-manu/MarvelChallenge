@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "devDependencies": {
+    "bootstrap-css": "^3.0.0",
     "md5": "^2.2.1",
     "react-scripts": "0.8.3"
   },
@@ -11,7 +12,7 @@
     "react-dom": "^15.4.1"
   },
   "scripts": {
-    "start": "react-scripts start webpack -w",
+    "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
