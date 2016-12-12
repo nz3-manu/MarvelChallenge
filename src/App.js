@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import md5 from 'md5';
 import './App.css';
+var Modal = require('react-modal');
 
 var Favourites = React.createClass({
   render: function () {
@@ -13,9 +14,45 @@ var Favourites = React.createClass({
     }
 });
 
-var WrapC = React.createClass({
-  bigImg:function(){
-    this.props.thumbnails(this.props.index)
+var ViewMore = React.createClass({
+ render:function () {
+    return (
+        <div className="fullScreenColor">
+              <div className="wrap__fullScreenColor">
+                <div className="fullScreenColor__ImgDescription">
+                  <img className="fullScreen__Img" src = {this.props.imgCurrentCmc}/>
+                  <h3> {this.props.titleCurrentCmc} </h3>
+                  <p> {this.props.descripCurrentCmc} </p>
+               </div>
+                <div className="fullScreenColor__btn">
+                    <button type="button" name="ADDED TO FAVOURITES"></button>
+                    <button type="button" name="BUY"></button>
+                </div>
+              </div>
+        </div>
+    )
+  }
+});
+
+var WrapComics = React.createClass({
+  getInitialState: function() {
+    return { modalIsOpen: false };
+  },
+  openModal: function() {
+    this.setState({modalIsOpen: true});
+  },
+  afterOpenModal: function() {
+    // references are now sync'd and can be accessed.
+    this.refs.subtitle.style.color = '#f00';
+  },
+  closeModal: function() {
+    this.setState({modalIsOpen: false});
+  },
+  btnViewMore: function(i) {
+    var currentComics = this.state.Comics;
+    alert(i);
+      <ViewMore imgCurrentCmc={`${currentComics[i].thumbnail.path}.${currentComics[i].thumbnail.extension}`}  titleCurrentCmc = {currentComics[i].name}  descripCurrentCmc={currentComics.description}/>;
+
   },
   render: function() {
     return (
@@ -29,13 +66,14 @@ var WrapC = React.createClass({
             <div className="wrapPrincipal__title">
                 <h1> {this.props.name} </h1>
                 <p> {this.props.description} </p>
-                <button type="button"  onClick={this.bigImg} className="btn btn-danger"> View more</button>
+                <button type="button"  onClick={this.btnViewMore.bind(null,this.props.index)} className="btn btn-danger"> View more</button>
                 <p> Related comics </p>
                 <p> Related comics </p>
             </div>
       </div> )
   }
 });
+
 
 /* Principal component */
 var App = React.createClass ({
@@ -54,15 +92,11 @@ var App = React.createClass ({
     var publicKey = 'c57e6859e9459a4c9eef30559c5f5cea';
     var hash = md5( ts + privateKey + publicKey);
     var url = `https://gateway.marvel.com:443/v1/public/characters?nameStartsWith=${query}&limit=100&ts=${ts}&apikey=${publicKey}&hash=${hash}`;
-   fetch(url).then(comitsApi => comitsApi.json()).then(comitsApi => {
-         this.setState({ comits: comitsApi.data.results });
+   fetch(url).then(ComicsApi => ComicsApi.json()).then(ComicsApi => {
+         this.setState({ Comics: ComicsApi.data.results });
        })
   },
-  viewMore: function(i){
-    
-  },
   render: function() {
-    console.log(this.state.comits);
     return (
       <div className = "wrap">
           <nav className="navPrincipal">
@@ -86,14 +120,18 @@ var App = React.createClass ({
                       <img src= "/icons/btn_arrow_down.png" height="40px" alt="Characters"/>
                     </div>
                 </div>
-                {(this.state.comits) ? this.state.comits.map((iC, i) => <WrapC img={`${iC.thumbnail.path}.${iC.thumbnail.extension}`} name={iC.name} description={iC.description} thumbnails={this.viewMore} index={i}/>) : "waiting..."}
+                  {
+                    (this.state.Comics) ? this.state.Comics.map((arrayComics, i) =>
+                    <WrapComics img={`${arrayComics.thumbnail.path}.${arrayComics.thumbnail.extension}`} name={arrayComics.name} description={arrayComics.description} thumbnails={this.btnViewMore} key={i} index={i}/>)
+                    : "waiting..."
+                  }
                   </div>
                   <div className="wrapFavourites">
                     <div className="nav_Favourites">
                         <img src="/icons/btn-favourites-primary.png" width="50px" height="50px" alt="search"/>
                         <h2 className="textFavourites">My Favourites</h2>
-
                     </div>
+                      <ViewMore/>
                   </div>
             </div>
       </div>
