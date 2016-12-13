@@ -15,31 +15,43 @@ var Favourites = React.createClass({
 });
 
 const customStyles = {
+  overlay : {
+    position          : 'fixed',
+    top               : 0,
+    left              : 0,
+    right             : 0,
+    bottom            : 0,
+    backgroundColor   :'rgba(106, 102, 103, 0.85)'
+  },
   content : {
     top                   : '50%',
     left                  : '50%',
     right                 : 'auto',
     bottom                : 'auto',
+    background            : 'white',
     marginRight           : '-50%',
-    transform             : 'translate(-50%, -50%)'
+    transform             : 'translate(-40%, -40%)'
   }
 };
 
 var ViewMore = React.createClass({
  render:function () {
     return (
-        <div className="fullScreenColor">
-              <div className="wrap__fullScreenColor">
-                <div className="fullScreenColor__ImgDescription">
-                  <img className="fullScreen__Img" src = {this.props.imgCurrentCmc}/>
-                  <h3> {this.props.titleCurrentCmc} </h3>
-                  <p> {this.props.descripCurrentCmc} </p>
-               </div>
-                <div className="fullScreenColor__btn">
-                    <button type="button" name="ADDED TO FAVOURITES"></button>
-                    <button type="button" name="BUY"></button>
+      <div className="fullScreenColor">
+            <div className="wrap__fullScreenColor">
+              <button className="closeFullScreen" onClick={this.closeModal}>X</button>
+              <div className="fullScreenColor__ImgDescription">
+                  <img className="fullScreen__Img" src = "http://i.annihil.us/u/prod/marvel/i/mg/3/20/5232158de5b16.jpg"/>
+                <div className="tittleDescription__wrap">
+                  <h3> A-Bomb (HAS) </h3>
+                  <p> Rick Jones has been Hulk's best bud since day one, but now he's more than a friend...he's a teammate! Transformed by a Gamma energy explosion, A-Bomb's thick, armored skin is just as strong and powerful as it is blue. And when he curls into action, he uses it like a giant bowling ball of destruction! </p>
                 </div>
+             </div>
+              <div className="fullScreenColor__btn">
+                  <div className="btnC"><img src="/icons/btn-favourites-primary.png" width="50px" height="50px" alt=""/><p className="btnF_text">ADDED TO FAVOURITES</p></div>
+                  <div className="btnC"><img src="/icons/btn-favourites-primary.png" width="50px" height="50px" alt=""/><p className="btnF_text">BUY</p></div>
               </div>
+            </div>
         </div>
     )
   }
@@ -47,46 +59,23 @@ var ViewMore = React.createClass({
 
 var WrapComics = React.createClass({
   getInitialState: function() {
-    return { modalIsOpen: false };
+    return { modal: {modalIsOpen: false}}
   },
-  openModal: function() { this.setState({modalIsOpen: true});
-  },
-  afterOpenModal: function() {
-    // references are now sync'd and can be accessed.
-    this.refs.subtitle.style.color = '#f00';
+  openModal: function() {
+    this.setState({modal:{
+      modalIsOpen: true,
+      currentComics: this.props}});
   },
   closeModal: function() {
-    this.setState({modalIsOpen: false});
-  },
-  btnViewMore: function(i) {
-    this.openModal();
-    var currentComics = this.state.Comics;
-      <ViewMore imgCurrentCmc={`${currentComics[i].thumbnail.path}.${currentComics[i].thumbnail.extension}`}  titleCurrentCmc = {currentComics[i].name}  descripCurrentCmc={currentComics.description}/>;
-
+    console.log("cerrando");
+    this.setState({ modal: { modalIsOpen: false}})
   },
   render: function() {
     return (
         <div className="wrapPrincipal">
+        <Modal isOpen = {this.state.modal.modalIsOpen} onRequestClose={this.closeModal} style={customStyles} contentLabel="Example Modal">
 
-        <Modal isOpen={this.state.modalIsOpen} onAfterOpen={this.afterOpenModal} onRequestClose={this.closeModal} style={customStyles}>
-                <div className="fullScreenColor">
-                      <div className="wrap__fullScreenColor">
-                        <button className="closeFullScreen" onClick={this.closeModal}>X</button>
-                        <div className="fullScreenColor__ImgDescription">
-
-                            <img className="fullScreen__Img" src = "http://i.annihil.us/u/prod/marvel/i/mg/3/20/5232158de5b16.jpg"/>
-
-                          <div className="tittleDescription__wrap">
-                            <h3> A-Bomb (HAS) </h3>
-                            <p> Rick Jones has been Hulk's best bud since day one, but now he's more than a friend...he's a teammate! Transformed by a Gamma energy explosion, A-Bomb's thick, armored skin is just as strong and powerful as it is blue. And when he curls into action, he uses it like a giant bowling ball of destruction! </p>
-                          </div>
-                       </div>
-                        <div className="fullScreenColor__btn">
-                            <div className="btnC"><img src="/icons/btn-favourites-primary.png" width="50px" height="50px" alt=""/><p className="btnF_text">ADDED TO FAVOURITES</p></div>
-                            <div className="btnC"><img src="/icons/btn-favourites-primary.png" width="50px" height="50px" alt=""/><p className="btnF_text">BUY</p></div>
-                        </div>
-                      </div>
-                </div>
+          <ViewMore />
         </Modal>
 
             <div className="wrapPrincipal__img">
@@ -98,7 +87,7 @@ var WrapComics = React.createClass({
             <div className="wrapPrincipal__title">
                 <h1> {this.props.name} </h1>
                 <p> {this.props.description} </p>
-                <button type="button"  onClick={this.btnViewMore.bind(null,this.props.index)} className="btn btn-danger"> View more</button>
+                <button type="button"  onClick={this.openModal} className="btn btn-danger"> View more</button>
                 <p> Related comics </p>
                 <p> Related comics </p>
             </div>
@@ -153,8 +142,8 @@ var App = React.createClass ({
                     </div>
                 </div>
                   {
-                    (this.state.Comics) ? this.state.Comics.map((arrayComics, i) =>
-                    <WrapComics img={`${arrayComics.thumbnail.path}.${arrayComics.thumbnail.extension}`} name={arrayComics.name} description={arrayComics.description} thumbnails={this.btnViewMore} key={i} index={i}/>)
+                    (this.state.Comics) ? this.state.Comics.map((ComicInfo, i) =>
+                    <WrapComics img={`${ComicInfo.thumbnail.path}.${ComicInfo.thumbnail.extension}`}  name={ComicInfo.name} description={ComicInfo.description} key={i} index={i}/>)
                     : "waiting..."
                   }
                   </div>
@@ -163,7 +152,8 @@ var App = React.createClass ({
                         <img src="/icons/btn-favourites-primary.png" width="50px" height="50px" alt="search"/>
                         <h2 className="textFavourites">My Favourites</h2>
                     </div>
-                      <ViewMore/>
+
+
                   </div>
             </div>
       </div>
