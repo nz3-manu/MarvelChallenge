@@ -14,6 +14,17 @@ var Favourites = React.createClass({
     }
 });
 
+const customStyles = {
+  content : {
+    top                   : '50%',
+    left                  : '50%',
+    right                 : 'auto',
+    bottom                : 'auto',
+    marginRight           : '-50%',
+    transform             : 'translate(-50%, -50%)'
+  }
+};
+
 var ViewMore = React.createClass({
  render:function () {
     return (
@@ -38,8 +49,7 @@ var WrapComics = React.createClass({
   getInitialState: function() {
     return { modalIsOpen: false };
   },
-  openModal: function() {
-    this.setState({modalIsOpen: true});
+  openModal: function() { this.setState({modalIsOpen: true});
   },
   afterOpenModal: function() {
     // references are now sync'd and can be accessed.
@@ -49,14 +59,36 @@ var WrapComics = React.createClass({
     this.setState({modalIsOpen: false});
   },
   btnViewMore: function(i) {
+    this.openModal();
     var currentComics = this.state.Comics;
-    alert(i);
       <ViewMore imgCurrentCmc={`${currentComics[i].thumbnail.path}.${currentComics[i].thumbnail.extension}`}  titleCurrentCmc = {currentComics[i].name}  descripCurrentCmc={currentComics.description}/>;
 
   },
   render: function() {
     return (
         <div className="wrapPrincipal">
+
+        <Modal isOpen={this.state.modalIsOpen} onAfterOpen={this.afterOpenModal} onRequestClose={this.closeModal} style={customStyles}>
+                <div className="fullScreenColor">
+                      <div className="wrap__fullScreenColor">
+                        <button className="closeFullScreen" onClick={this.closeModal}>X</button>
+                        <div className="fullScreenColor__ImgDescription">
+
+                            <img className="fullScreen__Img" src = "http://i.annihil.us/u/prod/marvel/i/mg/3/20/5232158de5b16.jpg"/>
+
+                          <div className="tittleDescription__wrap">
+                            <h3> A-Bomb (HAS) </h3>
+                            <p> Rick Jones has been Hulk's best bud since day one, but now he's more than a friend...he's a teammate! Transformed by a Gamma energy explosion, A-Bomb's thick, armored skin is just as strong and powerful as it is blue. And when he curls into action, he uses it like a giant bowling ball of destruction! </p>
+                          </div>
+                       </div>
+                        <div className="fullScreenColor__btn">
+                            <div className="btnC"><img src="/icons/btn-favourites-primary.png" width="50px" height="50px" alt=""/><p className="btnF_text">ADDED TO FAVOURITES</p></div>
+                            <div className="btnC"><img src="/icons/btn-favourites-primary.png" width="50px" height="50px" alt=""/><p className="btnF_text">BUY</p></div>
+                        </div>
+                      </div>
+                </div>
+        </Modal>
+
             <div className="wrapPrincipal__img">
                 <img height="200px" width="200px" className="img-circle" src={this.props.img}/>
                 <h3> Related comics </h3>
