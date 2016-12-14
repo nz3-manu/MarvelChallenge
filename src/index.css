@@ -72,7 +72,6 @@ p {
 
 .wrapContainer {
     width: 963px;
-    ;
     background-color: #f5f5f5;
     padding: 45px;
     display: flex;
@@ -80,24 +79,33 @@ p {
     flex-wrap: wrap;
 }
 
-.wrapPrincipal {
+.section__wrap {
     width: 45%;
     margin-bottom: 45px;
     background-color: white;
     display: flex;
     align-items: center;
+    position: relative;
 }
 
-.wrapPrincipal__img {
+.section__comicImgText {
     width: 50%;
+    height: 100%;
 }
 
-.wrapPrincipal__title {
+.section__wrap__title {
     width: 50%;
+    height: 100%;
 }
 
-.img-circle {
-    margin: -14px;
+.positionAbsoltImg {
+    position: absolute;
+    top:-15px;
+    left:-15px;
+}
+.comicImgText__wrapSection{
+  margin-top: 200px;
+  padding: 0px 20px;
 }
 
 
@@ -145,7 +153,6 @@ p {
     width: 812px;
     height: 551px;
     background-color: white;
-    position: relative;
 }
 
 .modal__imgNameDescription {

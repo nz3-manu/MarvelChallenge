@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import Modal from 'react-modal';
 
-
 const customStyles = {
     overlay: {
         position: 'fixed',
@@ -48,7 +47,7 @@ var WrapComics = React.createClass({
     },
     render: function() {
         return (
-            <div className="wrapPrincipal">
+            <section className="section__wrap">
                 <Modal isOpen={this.state.modal.modalIsOpen} onRequestClose={this.closeModal} style={customStyles} contentLabel="Example Modal">
                     <div className="wrap__modal">
                         <div className="modal__imgNameDescription">
@@ -80,19 +79,23 @@ var WrapComics = React.createClass({
                         </div>
                     </div>
                 </Modal>
-                <div className="wrapPrincipal__img">
-                    <img height="200px" width="200px" className="img-circle" src={this.props.img}/>
-                    <h3>
-                        Related comics
-                    </h3>
-                    <p>
-                        Related comics
-                    </p>
-                    <p>
-                        Related comics
-                    </p>
+
+                <div className="section__comicImgText">
+
+                    <img height="200px" width="200px" className="img-circle positionAbsoltImg" src={this.props.img}/>
+                    <div className="comicImgText__wrapSection">
+                        <h4>
+                            Related comics
+                        </h4>
+                        <p>
+                            Related comics
+                        </p>
+                        <p>
+                            Related comics
+                        </p>
+                    </div>
                 </div>
-                <div className="wrapPrincipal__title">
+                <div className="section__wrap__title">
                     <h1>
                         {this.props.name}
                     </h1>
@@ -108,7 +111,7 @@ var WrapComics = React.createClass({
                         Related comics
                     </p>
                 </div>
-            </div>
+            </section>
         )
     }
 });

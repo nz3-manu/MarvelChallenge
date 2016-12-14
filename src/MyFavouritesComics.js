@@ -1,9 +1,12 @@
 import React, {Component} from 'react';
 
 var MyFavouritesComics = React.createClass({
+  getInitialState: function(){
+    return{}
+  },
     render: function() {
         return (
-            <div className="wrap__aside">
+            <sidebar className="wrap__aside">
                 <div className="aside__nav">
                     <img src="/icons/btn-favourites-primary.png" width="50px" height="50px" alt="btn-search"/>
                     <h2 className="textFavourites"> My Favourites</h2>
@@ -15,7 +18,7 @@ var MyFavouritesComics = React.createClass({
                         A-Bomb (HAS)
                     </h3>
                 </div>
-            </div>
+            </sidebar>
         )
     }
 });
