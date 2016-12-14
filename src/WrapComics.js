@@ -15,6 +15,8 @@ const customStyles = {
         bottom: 'auto',
         background: 'white',
         marginRight: '-50%',
+        padding:     '0px',
+        border:       'none',
         transform: 'translate(-40%, -40%)'
     }
 };
@@ -47,15 +49,14 @@ var WrapComics = React.createClass({
         return (
             <div className="wrapPrincipal">
                 <Modal isOpen={this.state.modal.modalIsOpen} onRequestClose={this.closeModal} style={customStyles} contentLabel="Example Modal">
-                    <div className="fullScreenColor">
-                        <div className="fullScreenColor__BtnImgDescription">
-                            <div className="wrap__fullScreenColor">
-                                <button className="closeFullScreen" onClick={this.closeModal}>X</button>
-                                <div className="fullScreenColor__ImgDescription">
-                                    <img className="fullScreen__Img" src ={(this.state.modal.currentComics)
+                    <div className="wrap__modal">
+                            <div className="modal__imgNameDescription">
+                                <button className="closeModal" onClick={this.closeModal}>X</button>
+                                <div className="imgNameDescription__current">
+                                    <img className="current__img" src ={(this.state.modal.currentComics)
                                         ? this.state.modal.currentComics.img
                                         : ""}/>
-                                    <div className="tittleDescription__wrap">
+                                    <div className="current__nameDescription">
                                         <h3>
                                             {(this.state.modal.currentComics)
                                                 ? this.state.modal.currentComics.name
@@ -68,15 +69,14 @@ var WrapComics = React.createClass({
                                     </div>
                                 </div>
                             </div>
-                            <div className="fullScreenColor__btn">
-                                <div className="btnC"><img src="/icons/btn-favourites-primary.png" width="50px" height="50px" alt=""/>
-                                    <p className="btnF_text">ADDED TO FAVOURITES</p>
+                            <div className="modal__btnBuyFavorite">
+                                <div className="btnBuyFavorite"><img src="/icons/btn-favourites-primary.png" width="50px" height="50px" alt=""/>
+                                    <p className="btnBuyFavorite_text">ADDED TO FAVOURITES</p>
                                 </div>
-                                <div className="btnC"><img src="/icons/btn-favourites-primary.png" width="50px" height="50px" alt=""/>
-                                    <p className="btnF_text">BUY</p>
+                                <div className="btnBuyFavorite"><img src="/icons/btn-favourites-primary.png" width="50px" height="50px" alt=""/>
+                                    <p className="btnBuyFavorite_text">BUY</p>
                                 </div>
                             </div>
-                        </div>
                     </div>
                 </Modal>
                 <div className="wrapPrincipal__img">
