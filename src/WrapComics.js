@@ -24,7 +24,8 @@ var WrapComics = React.createClass({
         return {
             modal: {
                 modalIsOpen: false
-            }
+            },
+            favoriteComic: []
         }
     },
     openModal: function() {
@@ -43,7 +44,12 @@ var WrapComics = React.createClass({
         })
     },
     addFavorite: function() {
-        console.log("manolete", this);
+
+        const img = this.state.modal.currentComics.img;
+        const name = this.state.modal.currentComics.name
+        const addFavorite = this.state.favoriteComic;
+        addFavorite.push({"img": img, "name": name});
+        this.setState({favoriteComic: addFavorite})
     },
     render: function() {
         return (
@@ -112,6 +118,7 @@ var WrapComics = React.createClass({
                     </p>
                 </div>
             </section>
+
         )
     }
 });

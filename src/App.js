@@ -40,14 +40,14 @@ var App = React.createClass({
                         <img src="/icons/search.png" width="50px" height="50px" alt="search"/>
                     </div>
                 </nav>
-                <div className="wrapContainerFavourites">
-                    <div className="wrapContainer">
-                        <div className="wrapContainer__sortBy">
-                            <div className="sortBy__imgCharact">
+                <div className="wrap__sectionSearchBySidebar">
+                    <div className="wrap__sectionSearchBy">
+                        <div className="wrap__SearchBy">
+                            <div className="searchBy__container">
                                 <img src="/icons/characters.png" height="40px" alt="Characters"/>
                                 <h2>Characters</h2>
                             </div>
-                            <div className="sortBy__btnSorBy">
+                            <div className="searchBy__iconText">
                                 <p>
                                     Sort by
                                 </p>
