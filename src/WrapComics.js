@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
-import md5 from 'md5';
-import './App.css';
 import Modal from 'react-modal';
+
 
 const customStyles = {
     overlay: {
@@ -15,8 +14,8 @@ const customStyles = {
         bottom: 'auto',
         background: 'white',
         marginRight: '-50%',
-        padding:     '0px',
-        border:       'none',
+        padding: '0px',
+        border: 'none',
         transform: 'translate(-40%, -40%)'
     }
 };
@@ -38,45 +37,47 @@ var WrapComics = React.createClass({
         });
     },
     closeModal: function() {
-        console.log("cerrando");
         this.setState({
             modal: {
                 modalIsOpen: false
             }
         })
     },
+    addFavorite: function() {
+        console.log("manolete", this);
+    },
     render: function() {
         return (
             <div className="wrapPrincipal">
                 <Modal isOpen={this.state.modal.modalIsOpen} onRequestClose={this.closeModal} style={customStyles} contentLabel="Example Modal">
                     <div className="wrap__modal">
-                            <div className="modal__imgNameDescription">
-                                <button className="closeModal" onClick={this.closeModal}>X</button>
-                                <div className="imgNameDescription__current">
-                                    <img className="current__img" src ={(this.state.modal.currentComics)
-                                        ? this.state.modal.currentComics.img
-                                        : ""}/>
-                                    <div className="current__nameDescription">
-                                        <h3>
-                                            {(this.state.modal.currentComics)
-                                                ? this.state.modal.currentComics.name
-                                                : ""}
-                                        </h3>
-                                        <p>
-                                            {(this.state.modal.currentComics)
-                                                ? this.state.modal.currentComics.description
-                                                : ""}</p>
-                                    </div>
+                        <div className="modal__imgNameDescription">
+                            <button className="closeModal" onClick={this.closeModal}>X</button>
+                            <div className="imgNameDescription__current">
+                                <img className="current__img" src ={(this.state.modal.currentComics)
+                                    ? this.state.modal.currentComics.img
+                                    : ""}/>
+                                <div className="current__nameDescription">
+                                    <h3>
+                                        {(this.state.modal.currentComics)
+                                            ? this.state.modal.currentComics.name
+                                            : ""}
+                                    </h3>
+                                    <p>
+                                        {(this.state.modal.currentComics)
+                                            ? this.state.modal.currentComics.description
+                                            : ""}</p>
                                 </div>
                             </div>
-                            <div className="modal__btnBuyFavorite">
-                                <div className="btnBuyFavorite"><img src="/icons/btn-favourites-primary.png" width="50px" height="50px" alt=""/>
-                                    <p className="btnBuyFavorite_text">ADDED TO FAVOURITES</p>
-                                </div>
-                                <div className="btnBuyFavorite"><img src="/icons/btn-favourites-primary.png" width="50px" height="50px" alt=""/>
-                                    <p className="btnBuyFavorite_text">BUY</p>
-                                </div>
+                        </div>
+                        <div className="modal__btnBuyFavorite">
+                            <div className="btnBuyFavorite" onClick={this.addFavorite}><img src="/icons/btn-favourites-primary.png" width="50px" height="50px" alt=""/>
+                                <p className="btnBuyFavorite_text">ADDED TO FAVOURITES</p>
                             </div>
+                            <div className="btnBuyFavorite"><img src="/icons/btn-favourites-primary.png" width="50px" height="50px" alt=""/>
+                                <p className="btnBuyFavorite_text">BUY</p>
+                            </div>
+                        </div>
                     </div>
                 </Modal>
                 <div className="wrapPrincipal__img">

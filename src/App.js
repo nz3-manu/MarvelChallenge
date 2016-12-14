@@ -2,20 +2,8 @@ import React, {Component} from 'react';
 import md5 from 'md5';
 import './App.css';
 import Modal from 'react-modal';
+import MyFavouritesComics from './MyFavouritesComics.js';
 import WrapComics from './WrapComics.js';
-
-var Favourites = React.createClass({
-    render: function() {
-        return (
-            <div>
-                <img src={this.props.imgFavo}/>
-                <h3>
-                    {this.props.textFavo}
-                </h3>
-            </div>
-        )
-    }
-});
 
 /* Principal component */
 var App = React.createClass({
@@ -71,12 +59,7 @@ var App = React.createClass({
                             : "waiting..."
 }
                     </div>
-                    <div className="wrapFavourites">
-                        <div className="nav_Favourites">
-                            <img src="/icons/btn-favourites-primary.png" width="50px" height="50px" alt="search"/>
-                            <h2 className="textFavourites">My Favourites</h2>
-                        </div>
-                    </div>
+                    < MyFavouritesComics />
                 </div>
             </div>
         );
