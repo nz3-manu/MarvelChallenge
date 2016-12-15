@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import Modal from 'react-modal';
 
+
 const customStyles = {
     overlay: {
         position: 'fixed',
@@ -44,16 +45,15 @@ var WrapComics = React.createClass({
         })
     },
     addFavorite: function() {
-
+        this.props.appState;
         const img = this.state.modal.currentComics.img;
         const name = this.state.modal.currentComics.name
-        const addFavorite = this.state.favoriteComic;
-        addFavorite.push({"img": img, "name": name});
-        this.setState({favoriteComic: addFavorite})
+        this.props.appState.push({"img": img, "name": name});
     },
     render: function() {
         return (
             <section className="section__wrap">
+
                 <Modal isOpen={this.state.modal.modalIsOpen} onRequestClose={this.closeModal} style={customStyles} contentLabel="Example Modal">
                     <div className="wrap__modal">
                         <div className="modal__imgNameDescription">

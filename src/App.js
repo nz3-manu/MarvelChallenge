@@ -2,13 +2,13 @@ import React, {Component} from 'react';
 import md5 from 'md5';
 import './App.css';
 import Modal from 'react-modal';
-import MyFavouritesComics from './MyFavouritesComics.js';
 import WrapComics from './WrapComics.js';
+import MyFavouritesComics from './MyFavouritesComics.js';
 
 /* Principal component */
 var App = React.createClass({
     getInitialState: function() {
-        return {}
+        return {favorite:[]}
     },
     componentWillMount: function() {
         this.search()
@@ -55,11 +55,12 @@ var App = React.createClass({
                             </div>
                         </div>
                         {(this.state.Comics)
-                            ? this.state.Comics.map((ComicInfo, i) => <WrapComics img={`${ComicInfo.thumbnail.path}.${ComicInfo.thumbnail.extension}`} name={ComicInfo.name} description={ComicInfo.description} key={i} index={i}/>)
+                            ? this.state.Comics.map((ComicInfo, i) => (<WrapComics appState={this.state.favorite} img={`${ComicInfo.thumbnail.path}.${ComicInfo.thumbnail.extension}`} name={ComicInfo.name} description={ComicInfo.description} key={i} index={i}/>))
                             : "waiting..."
-}
+                            }
                     </div>
-                    < MyFavouritesComics />
+                      { (this.state.favorite) 
+                        ? this.state.favorite.map((favorite, i) => (<MyFavouritesComics imgFavoriteComic={favorite.img} nameFavoriteComic={favorite.name}/>)): "no"}
                 </div>
             </div>
         );
