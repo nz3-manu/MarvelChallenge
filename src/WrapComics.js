@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import Modal from 'react-modal';
 
-
 const customStyles = {
     overlay: {
         position: 'fixed',
@@ -25,7 +24,7 @@ var WrapComics = React.createClass({
         return {
             modal: {
                 modalIsOpen: false
-            },
+            }
         }
     },
     openModal: function() {
@@ -37,6 +36,7 @@ var WrapComics = React.createClass({
         });
     },
     closeModal: function() {
+      this.props.deleteMessage()
         this.setState({
             modal: {
                 modalIsOpen: false
@@ -68,7 +68,13 @@ var WrapComics = React.createClass({
                                     <p>
                                         {(this.state.modal.currentComics)
                                             ? this.state.modal.currentComics.description
-                                            : ""}</p>
+                                            : ""}
+                                    </p>
+                                    <h4 style={{
+                                        color: "red"
+                                    }}>
+                                        {this.props.showMessage}
+                                    </h4>
                                 </div>
                             </div>
                         </div>

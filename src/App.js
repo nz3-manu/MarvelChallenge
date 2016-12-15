@@ -11,7 +11,7 @@ var App = React.createClass({
         return {favorite: []}
     },
     componentWillMount: function() {
-        this.search()
+        this.search();
     },
     updateSearch: function() {
         this.search(this.refs.query.value)
@@ -28,8 +28,23 @@ var App = React.createClass({
     },
     addFavorite: function(img, name) {
         const favotiteComic = this.state.favorite
-        favotiteComic.push({"img": img, "name": name});
+        const arrayName = favotiteComic.map((findName) => findName.name)
+        const findDuplicateName = arrayName.indexOf(name)
+        if (-1 === findDuplicateName) {
+            favotiteComic.push({"img": img, "name": name});
+            this.setState({favorite:favotiteComic})
+        } else {
+            var message = "*The comic is already in favorites";
+            this.setState({error: message})
+        }
+    },
+    deleteComic: function(i) {
+        const favotiteComic = this.state.favorite;
+        favotiteComic.splice(i, 1);
         this.setState({favorite: favotiteComic})
+    },
+    clearError: function() {
+        this.setState({error: ""})
     },
     render: function() {
         return (
@@ -60,7 +75,7 @@ var App = React.createClass({
                             </div>
                         </div>
                         {(this.state.Comics)
-                            ? this.state.Comics.map((ComicInfo, i) => (<WrapComics appState={this.addFavorite} img={`${ComicInfo.thumbnail.path}.${ComicInfo.thumbnail.extension}`} name={ComicInfo.name} description={ComicInfo.description} key={i} index={i}/>))
+                            ? this.state.Comics.map((ComicInfo, i) => (<WrapComics appState={this.addFavorite} showMessage={this.state.error} deleteMessage={this.clearError} img={`${ComicInfo.thumbnail.path}.${ComicInfo.thumbnail.extension}`} name={ComicInfo.name} description={ComicInfo.description} key={i} index={i}/>))
                             : "waiting..."
 }
                     </div>
@@ -71,7 +86,7 @@ var App = React.createClass({
                                 My Favourites</h2>
                         </div>
                         {(this.state.favorite)
-                            ? this.state.favorite.map((favoriteComic, i) => (<MyFavouritesComics imgFavoriteComic={favoriteComic.img} nameFavoriteComic={favoriteComic.name} key={i}/>))
+                            ? this.state.favorite.map((favoriteComic, i) => (<MyFavouritesComics imgFavoriteComic={favoriteComic.img} deleteComic={this.deleteComic.bind(null, i)} nameFavoriteComic={favoriteComic.name} index={i} key={i}/>))
                             : "no"}
                     </sidebar>
                 </div>
