@@ -8,7 +8,7 @@ import MyFavouritesComics from './MyFavouritesComics.js';
 /* Principal component */
 var App = React.createClass({
     getInitialState: function() {
-        return {favorite:[]}
+        return {favorite: []}
     },
     componentWillMount: function() {
         this.search()
@@ -25,6 +25,11 @@ var App = React.createClass({
         fetch(url).then(ComicsApi => ComicsApi.json()).then(ComicsApi => {
             this.setState({Comics: ComicsApi.data.results});
         })
+    },
+    addFavorite: function(img, name) {
+        const favotiteComic = this.state.favorite
+        favotiteComic.push({"img": img, "name": name});
+        this.setState({favorite: favotiteComic})
     },
     render: function() {
         return (
@@ -55,12 +60,20 @@ var App = React.createClass({
                             </div>
                         </div>
                         {(this.state.Comics)
-                            ? this.state.Comics.map((ComicInfo, i) => (<WrapComics appState={this.state.favorite} img={`${ComicInfo.thumbnail.path}.${ComicInfo.thumbnail.extension}`} name={ComicInfo.name} description={ComicInfo.description} key={i} index={i}/>))
+                            ? this.state.Comics.map((ComicInfo, i) => (<WrapComics appState={this.addFavorite} img={`${ComicInfo.thumbnail.path}.${ComicInfo.thumbnail.extension}`} name={ComicInfo.name} description={ComicInfo.description} key={i} index={i}/>))
                             : "waiting..."
-                            }
+}
                     </div>
-                      { (this.state.favorite) 
-                        ? this.state.favorite.map((favorite, i) => (<MyFavouritesComics imgFavoriteComic={favorite.img} nameFavoriteComic={favorite.name}/>)): "no"}
+                    <sidebar className="wrap__aside">
+                        <div className="aside__nav">
+                            <img src="/icons/btn-favourites-primary.png" width="50px" height="50px" alt="btn-search"/>
+                            <h2 className="textFavourites">
+                                My Favourites</h2>
+                        </div>
+                        {(this.state.favorite)
+                            ? this.state.favorite.map((favoriteComic, i) => (<MyFavouritesComics imgFavoriteComic={favoriteComic.img} nameFavoriteComic={favoriteComic.name} key={i}/>))
+                            : "no"}
+                    </sidebar>
                 </div>
             </div>
         );

@@ -6,19 +6,16 @@ var MyFavouritesComics = React.createClass({
   },
     render: function() {
         return (
-            <sidebar className="wrap__aside">
-                <div className="aside__nav">
-                    <img src="/icons/btn-favourites-primary.png" width="50px" height="50px" alt="btn-search"/>
-                    <h2 className="textFavourites"> My Favourites</h2>
+                <div className="aside__allFavoriteComics">
+                  <div className="aside__wrapImgNameBtn">
+                      <div className="btnDeleteComic"> <img src="/icons/btn-delete.png"  width="35px" height="35px" alt="btn-deleteComic"/> </div>
+                      <img className="imgFovoriteComic" src= {this.props.imgFavoriteComic}/>
+                      <h3>
+                          {this.props.nameFavoriteComic}
+                      </h3>
+                  </div>
                 </div>
-                <div className="aside__wrapImgNameBtn">
-                    <div className="btnDeleteComic"> <img src="/icons/btn-delete.png"  width="35px" height="35px" alt="btn-deleteComic"/> </div>
-                    <img className="imgFovoriteComic" src= {this.props.imgFavoriteComic}/>
-                    <h3>
-                        {this.props.nameFavoriteComic}
-                    </h3>
-                </div>
-            </sidebar>
+
         )
     }
 });

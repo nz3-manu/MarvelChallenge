@@ -127,11 +127,16 @@ p {
 .textFavourites {
     padding-left: 10px;
 }
+.aside__allFavoriteComics{
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
 
 .aside__wrapImgNameBtn {
   width: 215px;
   height: 430px;
-  margin: auto;
   position: relative;
 }
 

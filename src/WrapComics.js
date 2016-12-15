@@ -26,7 +26,6 @@ var WrapComics = React.createClass({
             modal: {
                 modalIsOpen: false
             },
-            favoriteComic: []
         }
     },
     openModal: function() {
@@ -45,15 +44,13 @@ var WrapComics = React.createClass({
         })
     },
     addFavorite: function() {
-        this.props.appState;
         const img = this.state.modal.currentComics.img;
-        const name = this.state.modal.currentComics.name
-        this.props.appState.push({"img": img, "name": name});
+        const name = this.state.modal.currentComics.name;
+        this.props.appState(img, name);
     },
     render: function() {
         return (
             <section className="section__wrap">
-
                 <Modal isOpen={this.state.modal.modalIsOpen} onRequestClose={this.closeModal} style={customStyles} contentLabel="Example Modal">
                     <div className="wrap__modal">
                         <div className="modal__imgNameDescription">
@@ -76,10 +73,10 @@ var WrapComics = React.createClass({
                             </div>
                         </div>
                         <div className="modal__btnBuyFavorite">
-                            <div className="btnBuyFavorite" onClick={this.addFavorite}><img src="/icons/btn-favourites-primary.png" width="50px" height="50px" alt=""/>
+                            <div className="btnBuyFavorite" onClick={this.addFavorite}><img src="/icons/btn-favourites-primary.png" width="50px" height="50px" alt="btn-favorite-Comic"/>
                                 <p className="btnBuyFavorite_text">ADDED TO FAVOURITES</p>
                             </div>
-                            <div className="btnBuyFavorite"><img src="/icons/btn-favourites-primary.png" width="50px" height="50px" alt=""/>
+                            <div className="btnBuyFavorite"><img src="/icons/btn-favourites-primary.png" width="50px" height="50px" alt="btn-buy"/>
                                 <p className="btnBuyFavorite_text">BUY</p>
                             </div>
                         </div>
