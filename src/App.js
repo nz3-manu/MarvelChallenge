@@ -34,16 +34,19 @@ var App = React.createClass({
         this.setState({limiteInferior, limiteSuperior})
     },
     addFavorite: function(img, name) {
-        const favotiteComic = this.state.favorite
-        const arrayName = favotiteComic.map((findName) => findName.name)
-        const findDuplicateName = arrayName.indexOf(name)
-        if (-1 === findDuplicateName) {
+        let favotiteComic = this.state.favorite;
+        let arrayName = favotiteComic.map((findName) => findName.name);
+        let findDuplicateName = arrayName.indexOf(name);
+        var longArrayFavorite =this.state.favorite.length
+        if ((-1 === findDuplicateName) && (longArrayFavorite < 4)) {
+          console.log(this.state.favorite);
             favotiteComic.push({"img": img, "name": name});
             this.setState({favorite: favotiteComic})
         } else {
-            var message = "*The comic is already in favorites";
+            var message = (longArrayFavorite < 4)?( "*The comic is already in favorites"):("*t is allowed only 4 comics favorites");
             this.setState({error: message})
         }
+
     },
     deleteComic: function(i) {
         const favotiteComic = this.state.favorite;
@@ -74,7 +77,6 @@ var App = React.createClass({
                 let ComicInfo = this.state.Comics[i];
                 let ComicActual = <WrapComics appState={this.addFavorite} showMessage={this.state.error} deleteMessage={this.clearError} img={`${ComicInfo.thumbnail.path}.${ComicInfo.thumbnail.extension}`} name={ComicInfo.name} description={ComicInfo.description} key={i} index={i}/>
                 actualPagination.push(ComicActual);
-
             };
         }
 
