@@ -3,50 +3,81 @@ import md5 from 'md5';
 import './App.css';
 import WrapComics from './WrapComics.js';
 import MyFavouritesComics from './MyFavouritesComics.js';
-import ButtonToolbar from './ButtonToolbar.js'
 
 /* Principal component */
 var App = React.createClass({
     getInitialState: function() {
-        return {favorite: []}
+        return {favorite: [], limiteInferior: 0, limiteSuperior: 10}
     },
     componentWillMount: function() {
-        this.search();
+         this.search()
     },
     updateSearch: function() {
         this.search(this.refs.query.value)
     },
-    search: function(query="a") {
-        var ts=Date.now();
-        var privateKey='bad9d9b6858465b85f02e3b333d36e2b2220f599';
-        var publicKey='c57e6859e9459a4c9eef30559c5f5cea';
-        var hash=md5(ts + privateKey + publicKey);
-        var url=`https://gateway.marvel.com:443/v1/public/characters?nameStartsWith=${query}&limit=100&ts=${ts}&apikey=${publicKey}&hash=${hash}`;
-        fetch(url).then(ComicsApi => ComicsApi.json()).then(ComicsApi => {
+    search: function(query = "a") {
+        var ts = Date.now();
+        var privateKey = 'bad9d9b6858465b85f02e3b333d36e2b2220f599';
+        var publicKey = 'c57e6859e9459a4c9eef30559c5f5cea';
+        var hash = md5(ts + privateKey + publicKey);
+        var url = `https://gateway.marvel.com:443/v1/public/characters?nameStartsWith=${query}&limit=100&ts=${ts}&apikey=${publicKey}&hash=${hash}`;
+       fetch(url).then(ComicsApi => ComicsApi.json()).then(ComicsApi => {
             this.setState({Comics: ComicsApi.data.results});
         })
     },
+    showTenComics: function(i) {
+        i = (null == i)
+            ? 0
+            : i;
+        let limiteInferior = i;
+        let limiteSuperior = i + 10;
+        this.setState({limiteInferior, limiteSuperior})
+    },
     addFavorite: function(img, name) {
-        const favotiteComic=this.state.favorite
-        const arrayName=favotiteComic.map((findName)=> findName.name)
-        const findDuplicateName=arrayName.indexOf(name)
+        const favotiteComic = this.state.favorite
+        const arrayName = favotiteComic.map((findName) => findName.name)
+        const findDuplicateName = arrayName.indexOf(name)
         if (-1 === findDuplicateName) {
             favotiteComic.push({"img": img, "name": name});
             this.setState({favorite: favotiteComic})
         } else {
-            var message="*The comic is already in favorites";
+            var message = "*The comic is already in favorites";
             this.setState({error: message})
         }
     },
     deleteComic: function(i) {
-        const favotiteComic=this.state.favorite;
+        const favotiteComic = this.state.favorite;
         favotiteComic.splice(i, 1);
         this.setState({favorite: favotiteComic})
     },
     clearError: function() {
         this.setState({error: ""})
     },
+    paginationBtn: function() {
+        var paginationBtn = [];
+        if (this.state.Comics) {
+            for (let i = 0; i < this.state.Comics.length; i += 10) {
+                paginationBtn.push(
+                    <button type="button" onClick={this.showTenComics.bind(null, i)} className="btnToolbar" key={i}>
+                        {i}
+                    </button>
+                );
+            }
+            return paginationBtn;
+        }
+    },
     render: function() {
+        var actualPagination = [];
+
+        if (this.state.Comics) {
+            for (let i = this.state.limiteInferior; i < this.state.limiteSuperior; i++) {
+                let ComicInfo = this.state.Comics[i];
+                let ComicActual = <WrapComics appState={this.addFavorite} showMessage={this.state.error} deleteMessage={this.clearError} img={`${ComicInfo.thumbnail.path}.${ComicInfo.thumbnail.extension}`} name={ComicInfo.name} description={ComicInfo.description} key={i} index={i}/>
+                actualPagination.push(ComicActual);
+
+            };
+        }
+
         return (
             <div className="wrap">
                 <nav className="navPrincipal">
@@ -71,15 +102,21 @@ var App = React.createClass({
                                 <p>
                                     Sort by
                                 </p>
-                                <img  className="DropDownListSearch" src="/icons/btn_arrow_down.png" height="40px" alt="DropDown-Characters"/>
+                                <img className="DropDownListSearch" src="/icons/btn_arrow_down.png" height="40px" alt="DropDown-Characters"/>
                             </div>
                         </div>
-                        {(this.state.Comics)
-                            ? this.state.Comics.map((ComicInfo, i)=> (<WrapComics appState={this.addFavorite} showMessage={this.state.error} deleteMessage={this.clearError} img={`${ComicInfo.thumbnail.path}.${ComicInfo.thumbnail.extension}`} name={ComicInfo.name} description={ComicInfo.description} key={i} index={i}/>))
-                            : "waiting..."
-                            }
 
-                            <ButtonToolbar/>
+                        {actualPagination}
+
+                        <div className="wrap__toolbar">
+                            <button type="button" className="btnToolbar">
+                                &#60;
+                            </button>
+                            {this.paginationBtn()}
+                            <button type="button" className="btnToolbar">
+                                &#62;
+                            </button>
+                        </div>
 
                     </div>
                     <sidebar className="wrap__aside">

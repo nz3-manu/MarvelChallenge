@@ -10,7 +10,6 @@ var ButtonToolbar=React.createClass({
               </button>
             );
         }
-        console.log(paginationBtn);
         return paginationBtn;
     },
     render: function() {
