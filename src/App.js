@@ -1,9 +1,9 @@
-import React, {Component} from 'react';
+import React from 'react';
 import md5 from 'md5';
 import './App.css';
-import Modal from 'react-modal';
 import WrapComics from './WrapComics.js';
 import MyFavouritesComics from './MyFavouritesComics.js';
+import ButtonToolbar from './ButtonToolbar.js'
 
 /* Principal component */
 var App = React.createClass({
@@ -16,30 +16,30 @@ var App = React.createClass({
     updateSearch: function() {
         this.search(this.refs.query.value)
     },
-    search: function(query = "a") {
-        var ts = Date.now();
-        var privateKey = 'bad9d9b6858465b85f02e3b333d36e2b2220f599';
-        var publicKey = 'c57e6859e9459a4c9eef30559c5f5cea';
-        var hash = md5(ts + privateKey + publicKey);
-        var url = `https://gateway.marvel.com:443/v1/public/characters?nameStartsWith=${query}&limit=100&ts=${ts}&apikey=${publicKey}&hash=${hash}`;
+    search: function(query="a") {
+        var ts=Date.now();
+        var privateKey='bad9d9b6858465b85f02e3b333d36e2b2220f599';
+        var publicKey='c57e6859e9459a4c9eef30559c5f5cea';
+        var hash=md5(ts + privateKey + publicKey);
+        var url=`https://gateway.marvel.com:443/v1/public/characters?nameStartsWith=${query}&limit=100&ts=${ts}&apikey=${publicKey}&hash=${hash}`;
         fetch(url).then(ComicsApi => ComicsApi.json()).then(ComicsApi => {
             this.setState({Comics: ComicsApi.data.results});
         })
     },
     addFavorite: function(img, name) {
-        const favotiteComic = this.state.favorite
-        const arrayName = favotiteComic.map((findName) => findName.name)
-        const findDuplicateName = arrayName.indexOf(name)
+        const favotiteComic=this.state.favorite
+        const arrayName=favotiteComic.map((findName)=> findName.name)
+        const findDuplicateName=arrayName.indexOf(name)
         if (-1 === findDuplicateName) {
             favotiteComic.push({"img": img, "name": name});
-            this.setState({favorite:favotiteComic})
+            this.setState({favorite: favotiteComic})
         } else {
-            var message = "*The comic is already in favorites";
+            var message="*The comic is already in favorites";
             this.setState({error: message})
         }
     },
     deleteComic: function(i) {
-        const favotiteComic = this.state.favorite;
+        const favotiteComic=this.state.favorite;
         favotiteComic.splice(i, 1);
         this.setState({favorite: favotiteComic})
     },
@@ -75,9 +75,12 @@ var App = React.createClass({
                             </div>
                         </div>
                         {(this.state.Comics)
-                            ? this.state.Comics.map((ComicInfo, i) => (<WrapComics appState={this.addFavorite} showMessage={this.state.error} deleteMessage={this.clearError} img={`${ComicInfo.thumbnail.path}.${ComicInfo.thumbnail.extension}`} name={ComicInfo.name} description={ComicInfo.description} key={i} index={i}/>))
+                            ? this.state.Comics.map((ComicInfo, i)=> (<WrapComics appState={this.addFavorite} showMessage={this.state.error} deleteMessage={this.clearError} img={`${ComicInfo.thumbnail.path}.${ComicInfo.thumbnail.extension}`} name={ComicInfo.name} description={ComicInfo.description} key={i} index={i}/>))
                             : "waiting..."
-}
+                            }
+
+                            <ButtonToolbar/>
+
                     </div>
                     <sidebar className="wrap__aside">
                         <div className="aside__nav">
@@ -89,7 +92,9 @@ var App = React.createClass({
                             ? this.state.favorite.map((favoriteComic, i) => (<MyFavouritesComics imgFavoriteComic={favoriteComic.img} deleteComic={this.deleteComic.bind(null, i)} nameFavoriteComic={favoriteComic.name} index={i} key={i}/>))
                             : "no"}
                     </sidebar>
+
                 </div>
+
             </div>
         );
     }

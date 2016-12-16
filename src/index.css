@@ -222,3 +222,11 @@ p {
 .btnBuyFavorite:hover {
     background-color: #322827;
 }
+/* toolbar */
+.wrap__toolbar{
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin: auto;
+  background-color: red
+}
