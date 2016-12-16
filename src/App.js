@@ -71,7 +71,7 @@ var App = React.createClass({
                                 <p>
                                     Sort by
                                 </p>
-                                <img src="/icons/btn_arrow_down.png" height="40px" alt="Characters"/>
+                                <img  className="DropDownListSearch" src="/icons/btn_arrow_down.png" height="40px" alt="DropDown-Characters"/>
                             </div>
                         </div>
                         {(this.state.Comics)
