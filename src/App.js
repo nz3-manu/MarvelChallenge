@@ -43,7 +43,7 @@ var App = React.createClass({
             favotiteComic.push({"img": img, "name": name});
             this.setState({favorite: favotiteComic})
         } else {
-            var message = (longArrayFavorite < 4)?( "*The comic is already in favorites"):("*t is allowed only 4 comics favorites");
+            var message = (longArrayFavorite < 4)?( "*The comic is already in favorites"):("*It is allowed only 4 comics favorites");
             this.setState({error: message})
         }
 
@@ -106,6 +106,7 @@ var App = React.createClass({
                                 </p>
                                 <img className="DropDownListSearch" src="/icons/btn_arrow_down.png" height="40px" alt="DropDown-Characters"/>
                             </div>
+
                         </div>
 
                         {actualPagination}
@@ -131,8 +132,12 @@ var App = React.createClass({
                             ? this.state.favorite.map((favoriteComic, i) => (<MyFavouritesComics imgFavoriteComic={favoriteComic.img} deleteComic={this.deleteComic.bind(null, i)} nameFavoriteComic={favoriteComic.name} index={i} key={i}/>))
                             : "no"}
                     </sidebar>
-
                 </div>
+
+                <div className="wrap__footer">
+                  <div className="footer__text"><short>Grability 2016 - Todos los derechos reservados </short></div>
+                  <div className="footer__img"><img src="/icons/grab-logo-circle@3x.png" width="50px" alt="icon-GRABILITY SAS"/></div>
+              </div>
 
             </div>
         );
