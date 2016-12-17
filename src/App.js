@@ -29,8 +29,9 @@ var App = React.createClass({
         i = (null == i)
             ? 0
             : i;
+        let longArrayComics = this.state.Comics.length
         let limiteInferior = i;
-        let limiteSuperior = i + 10;
+        let limiteSuperior = ((i + 10) > longArrayComics) ? longArrayComics : (i + 10)
         this.setState({limiteInferior, limiteSuperior})
     },
     addFavorite: function(img, name) {
@@ -71,7 +72,6 @@ var App = React.createClass({
     },
     render: function() {
         var actualPagination = [];
-
         if (this.state.Comics) {
             for (let i = this.state.limiteInferior; i < this.state.limiteSuperior; i++) {
                 let ComicInfo = this.state.Comics[i];
@@ -79,7 +79,6 @@ var App = React.createClass({
                 actualPagination.push(ComicActual);
             };
         }
-
         return (
             <div className="wrap">
                 <nav className="navPrincipal">
