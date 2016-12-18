@@ -75,7 +75,7 @@ var App = React.createClass({
         if (this.state.Comics) {
             for (let i = this.state.limiteInferior; i < this.state.limiteSuperior; i++) {
                 let ComicInfo = this.state.Comics[i];
-                let ComicActual = <WrapComics appState={this.addFavorite} showMessage={this.state.error} deleteMessage={this.clearError} img={`${ComicInfo.thumbnail.path}.${ComicInfo.thumbnail.extension}`} name={ComicInfo.name} description={ComicInfo.description} key={i} index={i}/>
+                let ComicActual = <WrapComics appState={this.addFavorite} showMessage={this.state.error} deleteMessage={this.clearError} img={`${ComicInfo.thumbnail.path}.${ComicInfo.thumbnail.extension}`} name={ComicInfo.name}  description={ComicInfo.description} key={i} index={i}/>
                 actualPagination.push(ComicActual);
             };
         }
@@ -99,12 +99,16 @@ var App = React.createClass({
                                 <img src="/icons/characters.png" height="40px" alt="Characters"/>
                                 <h2>Characters</h2>
                             </div>
+
+
                             <div className="searchBy__iconText">
-                                <p>
+                                <p className="sortByText">
                                     Sort by
                                 </p>
                                 <img className="DropDownListSearch" src="/icons/btn_arrow_down.png" height="40px" alt="DropDown-Characters"/>
                             </div>
+
+
 
                         </div>
 
