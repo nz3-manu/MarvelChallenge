@@ -7,13 +7,25 @@ import MyFavouritesComics from './MyFavouritesComics.js';
 /* Principal component */
 var App = React.createClass({
     getInitialState: function() {
-        return {favorite: [], limiteInferior: 0, limiteSuperior: 10}
+      let favorite = this.getProxyState("favorite")
+      let initialState = {favorite}
+      return initialState
+    },
+    proxySetState: function(state){
+        let stateKeys = Object.keys(state)
+        stateKeys.forEach((key)=>{
+          localStorage.setItem(key, JSON.stringify(state[key]));
+        })
+        this.setState(state)
+    },
+    getProxyState:function(stateKey){
+      return JSON.parse(localStorage.getItem(stateKey));
     },
     componentWillMount: function() {
          this.search()
     },
     updateSearch: function() {
-        this.search(this.refs.query.value)
+          this.search(this.refs.query.value)
     },
     search: function(query = "a") {
         var ts = Date.now();
@@ -22,45 +34,45 @@ var App = React.createClass({
         var hash = md5(ts + privateKey + publicKey);
         var url = `https://gateway.marvel.com:443/v1/public/characters?nameStartsWith=${query}&limit=100&ts=${ts}&apikey=${publicKey}&hash=${hash}`;
        fetch(url).then(ComicsApi => ComicsApi.json()).then(ComicsApi => {
-            this.setState({Comics: ComicsApi.data.results});
+            this.proxySetState({Comics: ComicsApi.data.results});
         })
     },
     showTenComics: function(i) {
         i = (null == i)
             ? 0
             : i;
-        let longArrayComics = this.state.Comics.length
+        let longArrayComics = this.getProxyState('Comics').length
         let limiteInferior = i;
         let limiteSuperior = ((i + 10) > longArrayComics) ? longArrayComics : (i + 10)
-        this.setState({limiteInferior, limiteSuperior})
+        this.proxySetState({limiteInferior, limiteSuperior})
     },
     addFavorite: function(img, name) {
-        let favotiteComic = this.state.favorite;
+        let favotiteComic = this.getProxyState("favorite")
+        favotiteComic = (!favotiteComic) ? []: favotiteComic;
         let arrayName = favotiteComic.map((findName) => findName.name);
         let findDuplicateName = arrayName.indexOf(name);
-        var longArrayFavorite =this.state.favorite.length
+        var longArrayFavorite = favotiteComic.length
         if ((-1 === findDuplicateName) && (longArrayFavorite < 4)) {
-          console.log(this.state.favorite);
             favotiteComic.push({"img": img, "name": name});
-            this.setState({favorite: favotiteComic})
+              this.proxySetState({favorite: favotiteComic})
         } else {
-            var message = (longArrayFavorite < 4)?( "*The comic is already in favorites"):("*It is allowed only 4 comics favorites");
-            this.setState({error: message})
+            let message = (longArrayFavorite < 4)?( "*The comic is already in favorites"):("*It is allowed only 4 comics favorites");
+            this.proxySetState({error: message})
         }
 
     },
     deleteComic: function(i) {
-        const favotiteComic = this.state.favorite;
+        const favotiteComic = this.getProxyState("favorite");
         favotiteComic.splice(i, 1);
-        this.setState({favorite: favotiteComic})
+        this.proxySetState({favorite: favotiteComic});
     },
     clearError: function() {
-        this.setState({error: ""})
+        this.proxySetState({error: ""})
     },
     paginationBtn: function() {
         var paginationBtn = [];
-        if (this.state.Comics) {
-            for (let i = 0; i < this.state.Comics.length; i += 10) {
+        if (this.getProxyState("Comics")) {
+            for (let i = 0; i < this.getProxyState("Comics").length; i += 10) {
                 paginationBtn.push(
                     <button type="button" onClick={this.showTenComics.bind(null, i)} className="btnToolbar" key={i}>
                         {i}
@@ -72,10 +84,13 @@ var App = React.createClass({
     },
     render: function() {
         var actualPagination = [];
-        if (this.state.Comics) {
-            for (let i = this.state.limiteInferior; i < this.state.limiteSuperior; i++) {
-                let ComicInfo = this.state.Comics[i];
-                let ComicActual = <WrapComics appState={this.addFavorite} showMessage={this.state.error} deleteMessage={this.clearError} img={`${ComicInfo.thumbnail.path}.${ComicInfo.thumbnail.extension}`} name={ComicInfo.name}  description={ComicInfo.description} key={i} index={i}/>
+        if (this.getProxyState("Comics")) {
+          let limiteInferior = (this.getProxyState("limiteInferior"))? this.getProxyState("limiteInferior") : 0
+          let limiteSuperior = (this.getProxyState("limiteSuperior"))? this.getProxyState("limiteSuperior") : 10
+            for (let i = limiteInferior; i < limiteSuperior; i++) {
+                let ComicInfo = this.getProxyState("Comics")[i];
+                let thumbnail = (ComicInfo.thumbnail)? `${ComicInfo.thumbnail.path}.${ComicInfo.thumbnail.extension}` : "http://placehold.it/200x200"
+                let ComicActual = <WrapComics appState={this.addFavorite} showMessage={this.getProxyState("error")} deleteMessage={this.clearError} img={thumbnail} name={ComicInfo.name}  description={ComicInfo.description} key={i} index={i}/>
                 actualPagination.push(ComicActual);
             };
         }
@@ -86,10 +101,8 @@ var App = React.createClass({
                         <img src="/icons/marvel.png" width="150px" height="60px" alt="brand"/>
                     </div>
                     <div className="navPrincipal__text">
-                        <input ref="query" className="formSearch" placeholder="Search" onChange={(e) => {
-                            this.updateSearch();
-                        }} type="text"/>
-                        <img src="/icons/search.png" width="50px" height="50px" alt="search"/>
+                        <input ref="query" className="formSearch" placeholder="Search" onKeyDown={(e)=>{(e.keyCode == 13) && this.updateSearch()}} type="text"/>
+                        <img src="/icons/search.png" id="searchComics" width="50px" height="50px" onClick={this.updateSearch} alt="search"/>
                     </div>
                 </nav>
                 <div className="wrap__sectionSearchBySidebar">
@@ -131,9 +144,9 @@ var App = React.createClass({
                             <h2 className="textFavourites">
                                 My Favourites</h2>
                         </div>
-                        {(this.state.favorite)
-                            ? this.state.favorite.map((favoriteComic, i) => (<MyFavouritesComics imgFavoriteComic={favoriteComic.img} deleteComic={this.deleteComic.bind(null, i)} nameFavoriteComic={favoriteComic.name} index={i} key={i}/>))
-                            : "no"}
+                        {(this.getProxyState("favorite"))
+                            ? this.getProxyState("favorite").map((favoriteComic, i) => (<MyFavouritesComics imgFavoriteComic={favoriteComic.img} deleteComic={this.deleteComic.bind(null, i)} nameFavoriteComic={favoriteComic.name} index={i} key={i}/>))
+                            : ""}
                     </sidebar>
                 </div>
 
