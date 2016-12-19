@@ -89,8 +89,10 @@ var App = React.createClass({
           let limiteSuperior = (this.getProxyState("limiteSuperior"))? this.getProxyState("limiteSuperior") : 10
             for (let i = limiteInferior; i < limiteSuperior; i++) {
                 let ComicInfo = this.getProxyState("Comics")[i];
-                let thumbnail = (ComicInfo.thumbnail)? `${ComicInfo.thumbnail.path}.${ComicInfo.thumbnail.extension}` : "http://placehold.it/200x200"
-                let ComicActual = <WrapComics appState={this.addFavorite} showMessage={this.getProxyState("error")} deleteMessage={this.clearError} img={thumbnail} name={ComicInfo.name}  description={ComicInfo.description} key={i} index={i}/>
+                let thumbnail = (ComicInfo && ComicInfo.thumbnail)? `${ComicInfo.thumbnail.path}.${ComicInfo.thumbnail.extension}` : "http://placehold.it/200x200";
+                let nameComic = (ComicInfo && ComicInfo.name)? ComicInfo.name :"No found";
+                let descriptionComic = (ComicInfo && ComicInfo.description)? ComicInfo.description :"No found";
+                let ComicActual = <WrapComics appState={this.addFavorite} showMessage={this.getProxyState("error")} deleteMessage={this.clearError} img={thumbnail} name={nameComic}  description={descriptionComic} key={i} index={i}/>
                 actualPagination.push(ComicActual);
             };
         }
