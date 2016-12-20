@@ -1,7 +1,7 @@
 import React from 'react';
 import Modal from 'react-modal';
 
-const customStyles={
+const customStyles = {
     overlay: {
         position: 'fixed',
         backgroundColor: 'rgba(106, 102, 103, 0.85)'
@@ -19,7 +19,7 @@ const customStyles={
     }
 };
 
-var WrapComics=React.createClass({
+var WrapComics = React.createClass({
     getInitialState: function() {
         return {
             modal: {
@@ -44,8 +44,8 @@ var WrapComics=React.createClass({
         })
     },
     addFavorite: function() {
-        const img=this.state.modal.currentComics.img;
-        const name=this.state.modal.currentComics.name;
+        const img = this.state.modal.currentComics.img;
+        const name = this.state.modal.currentComics.name;
         this.props.appState(img, name);
     },
     render: function() {
@@ -59,8 +59,8 @@ var WrapComics=React.createClass({
                                 <img className="current__img" src={(this.state.modal.currentComics)
                                     ? this.state.modal.currentComics.img
                                     : ""} alt={(this.state.modal.currentComics)
-                                        ? `img-${this.state.modal.currentComics.name}`
-                                        : ""}/>
+                                    ? `img-${this.state.modal.currentComics.name}`
+                                    : ""}/>
                                 <div className="current__nameDescription">
                                     <h3>
                                         {(this.state.modal.currentComics)

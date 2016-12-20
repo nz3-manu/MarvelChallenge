@@ -4,28 +4,29 @@ import './App.css';
 import WrapComics from './WrapComics.js';
 import MyFavouritesComics from './MyFavouritesComics.js';
 
-/* Principal component */
 var App = React.createClass({
     getInitialState: function() {
-      let favorite = this.getProxyState("favorite")
-      let initialState = {favorite}
-      return initialState
+        let favorite = this.getProxyState("favorite")
+        let initialState = {
+            favorite
+        }
+        return initialState
     },
-    proxySetState: function(state){
+    proxySetState: function(state) {
         let stateKeys = Object.keys(state)
-        stateKeys.forEach((key)=>{
-          localStorage.setItem(key, JSON.stringify(state[key]));
+        stateKeys.forEach((key) => {
+            localStorage.setItem(key, JSON.stringify(state[key]));
         })
         this.setState(state)
     },
-    getProxyState:function(stateKey){
-      return JSON.parse(localStorage.getItem(stateKey));
+    getProxyState: function(stateKey) {
+        return JSON.parse(localStorage.getItem(stateKey));
     },
     componentWillMount: function() {
-         this.search()
+        this.search()
     },
     updateSearch: function() {
-          this.search(this.refs.query.value)
+        this.search(this.refs.query.value)
     },
     search: function(query = "a") {
         var ts = Date.now();
@@ -33,7 +34,7 @@ var App = React.createClass({
         var publicKey = 'c57e6859e9459a4c9eef30559c5f5cea';
         var hash = md5(ts + privateKey + publicKey);
         var url = `https://gateway.marvel.com:443/v1/public/characters?nameStartsWith=${query}&limit=100&ts=${ts}&apikey=${publicKey}&hash=${hash}`;
-       fetch(url).then(ComicsApi => ComicsApi.json()).then(ComicsApi => {
+        fetch(url).then(ComicsApi => ComicsApi.json()).then(ComicsApi => {
             this.proxySetState({Comics: ComicsApi.data.results});
         })
     },
@@ -42,21 +43,27 @@ var App = React.createClass({
             ? 0
             : i;
         let longArrayComics = this.getProxyState('Comics').length
-        let limiteInferior = i;
-        let limiteSuperior = ((i + 10) > longArrayComics) ? longArrayComics : (i + 10)
-        this.proxySetState({limiteInferior, limiteSuperior})
+        let lowerLimit = i;
+        let upperLimit = ((i + 10) > longArrayComics)
+            ? longArrayComics
+            : (i + 10)
+        this.proxySetState({lowerLimit, upperLimit})
     },
     addFavorite: function(img, name) {
         let favotiteComic = this.getProxyState("favorite")
-        favotiteComic = (!favotiteComic) ? []: favotiteComic;
+        favotiteComic = (!favotiteComic)
+            ? []
+            : favotiteComic;
         let arrayName = favotiteComic.map((findName) => findName.name);
         let findDuplicateName = arrayName.indexOf(name);
         var longArrayFavorite = favotiteComic.length
         if ((-1 === findDuplicateName) && (longArrayFavorite < 4)) {
             favotiteComic.push({"img": img, "name": name});
-              this.proxySetState({favorite: favotiteComic})
+            this.proxySetState({favorite: favotiteComic})
         } else {
-            let message = (longArrayFavorite < 4)?( "*The comic is already in favorites"):("*It is allowed only 4 comics favorites");
+            let message = (longArrayFavorite < 4)
+                ? ("*The comic is already in favorites")
+                : ("*It is allowed only 4 comics favorites");
             this.proxySetState({error: message})
         }
 
@@ -85,14 +92,24 @@ var App = React.createClass({
     render: function() {
         var actualPagination = [];
         if (this.getProxyState("Comics")) {
-          let limiteInferior = (this.getProxyState("limiteInferior"))? this.getProxyState("limiteInferior") : 0
-          let limiteSuperior = (this.getProxyState("limiteSuperior"))? this.getProxyState("limiteSuperior") : 10
-            for (let i = limiteInferior; i < limiteSuperior; i++) {
+            let lowerLimit = (this.getProxyState("lowerLimit"))
+                ? this.getProxyState("lowerLimit")
+                : 0
+            let upperLimit = (this.getProxyState("upperLimit"))
+                ? this.getProxyState("upperLimit")
+                : 10
+            for (let i = lowerLimit; i < upperLimit; i++) {
                 let ComicInfo = this.getProxyState("Comics")[i];
-                let thumbnail = (ComicInfo && ComicInfo.thumbnail)? `${ComicInfo.thumbnail.path}.${ComicInfo.thumbnail.extension}` : "http://placehold.it/200x200";
-                let nameComic = (ComicInfo && ComicInfo.name)? ComicInfo.name :"No found";
-                let descriptionComic = (ComicInfo && ComicInfo.description)? ComicInfo.description :"No found";
-                let ComicActual = <WrapComics appState={this.addFavorite} showMessage={this.getProxyState("error")} deleteMessage={this.clearError} img={thumbnail} name={nameComic}  description={descriptionComic} key={i} index={i}/>
+                let thumbnail = (ComicInfo && ComicInfo.thumbnail)
+                    ? `${ComicInfo.thumbnail.path}.${ComicInfo.thumbnail.extension}`
+                    : "http://placehold.it/200x200";
+                let nameComic = (ComicInfo && ComicInfo.name)
+                    ? ComicInfo.name
+                    : "No found";
+                let descriptionComic = (ComicInfo && ComicInfo.description)
+                    ? ComicInfo.description
+                    : "No found";
+                let ComicActual = <WrapComics appState={this.addFavorite} showMessage={this.getProxyState("error")} deleteMessage={this.clearError} img={thumbnail} name={nameComic} description={descriptionComic} key={i} index={i}/>
                 actualPagination.push(ComicActual);
             };
         }
@@ -103,7 +120,9 @@ var App = React.createClass({
                         <img src="/icons/marvel.png" width="150px" height="60px" alt="brand"/>
                     </div>
                     <div className="navPrincipal__text">
-                        <input ref="query" className="formSearch" placeholder="Search" onKeyDown={(e)=>{(e.keyCode == 13) && this.updateSearch()}} type="text"/>
+                        <input ref="query" className="formSearch" placeholder="Search" onKeyDown={(e) => {
+                            (e.keyCode == 13) && this.updateSearch()
+                        }} type="text"/>
                         <img src="/icons/search.png" id="searchComics" width="50px" height="50px" onClick={this.updateSearch} alt="search"/>
                     </div>
                 </nav>
@@ -115,20 +134,14 @@ var App = React.createClass({
                                 <h2>Characters</h2>
                             </div>
 
-
                             <div className="searchBy__iconText">
                                 <p className="sortByText">
                                     Sort by
                                 </p>
                                 <img className="DropDownListSearch" src="/icons/btn_arrow_down.png" height="40px" alt="DropDown-Characters"/>
                             </div>
-
-
-
                         </div>
-
                         {actualPagination}
-
                         <div className="wrap__toolbar">
                             <button type="button" className="btnToolbar">
                                 &#60;
@@ -151,11 +164,13 @@ var App = React.createClass({
                             : ""}
                     </sidebar>
                 </div>
-
                 <div className="wrap__footer">
-                  <div className="footer__text"><short>Grability 2016 - Todos los derechos reservados </short></div>
-                  <div className="footer__img"><img src="/icons/grab-logo-circle@3x.png" width="50px" alt="icon-GRABILITY SAS"/></div>
-              </div>
+                    <div className="footer__text">
+                        <short>Grability 2016 - Todos los derechos reservados
+                        </short>
+                    </div>
+                    <div className="footer__img"><img src="/icons/grab-logo-circle@3x.png" width="50px" alt="icon-GRABILITY SAS"/></div>
+                </div>
 
             </div>
         );
