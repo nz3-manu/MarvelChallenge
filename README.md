@@ -3,8 +3,8 @@ Marvel Challenge
 
 Para ejecutar esta single page application (SPA), ejecuta en consola los siguientes comandos:
 
-npm install
-npm start
+* npm install
+* npm start
 
 ---
 ## Descripción breve de la SPA:
