@@ -17,5 +17,8 @@ Se creo un componente principal en React que se llama **App**, el cual va a cont
 
 * **Componente ButtonToolbar**: Es la paginación que se encuentra en la parte superior, es encargado de mostrar cada 10 comics, estos *ButtonToolbar* va a depender de la cantidad de comics que se traigan de la Api, ya a menor comics se necesitarían menos botones.
 
+***
 
 ### Url app funcional: https://nz3-manu.github.io/MarvelChallenge/
+
+***
